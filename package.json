@@ -1,0 +1,16 @@
+{
+  "name": "github-notification-trigger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "form-data": "^1.0.0-rc4",
+    "lodash": "^4.13.1",
+    "node-fetch": "^1.5.3"
+  }
+}

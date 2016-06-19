@@ -1,0 +1,8 @@
+{
+    "iftttUrl": "https://maker.ifttt.com/trigger/github-issues/with/key/abc-123-def-456",
+    "issueDescription": "Good First Bug",
+    "issueFilter": {
+        "repo": "facebook/react",
+        "labels": "good first bug"
+    }
+}
