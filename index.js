@@ -23,6 +23,11 @@ console.log('\nStarting up at', (new Date()).toUTCString());
 try {
   const configFile = fs.readFileSync(configFilePath).toString();
   config = JSON.parse(configFile);
+
+  if (config.iftttUrl.includes('abc-123-def-456')) {
+    console.log(`It looks like you havent filled in the iftttUrl value in ${configFilePath} correctly.\nCheck the readme for more details`);
+    process.exit(1);
+  }
 } catch (err) {
   console.error(err.stack);
   console.log(`Could not read config file at ${configFilePath}.\nCopy ./config.sample.json and fill in the details.`);
@@ -39,10 +44,9 @@ try {
 
 console.log(`There are ${prevIssues.length} previous issues.`);
 
-const extraQuery = _.omit(config.issueFilter, ['repo']);
-const query = querystring.stringify( _.extend({ per_page: 100 }, extraQuery) );
+const query = querystring.stringify( _.extend({ per_page: 100 }, config.issueFilter || {}) );
 
-const githubUrl = `https://api.github.com/repos/${config.issueFilter.repo}/issues?${query}`;
+const githubUrl = `https://api.github.com/repos/${config.repo}/issues?${query}`;
 let allIssues; // need to hoist this up here so we can access it later on
 
 fetch(githubUrl)
@@ -61,10 +65,9 @@ fetch(githubUrl)
 
     const firstNewIssue = _.find(issues, (issue) => issue.id.toString() === newIssues[0]);
 
-
     const msg = newIssues.length === 1
-      ? `A new ${config.issueDescription} has been posted on ${config.issueFilter.repo}: "${firstNewIssue.title}"`
-      : `${newIssues.length} new ${config.issueDescription}s have been posted on ${config.issueFilter.repo}`;
+      ? `A new ${config.issueDescription} has been posted on ${config.repo}: "${firstNewIssue.title}"`
+      : `${newIssues.length} new ${config.issueDescription}s have been posted on ${config.repo}`;
 
     console.log(`Posting to IFTTT: ${msg}`);
 
